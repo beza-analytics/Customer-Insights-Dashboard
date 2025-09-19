@@ -14,18 +14,20 @@ jobs:
       - name: Install deps
         run: |
           python -m pip install --upgrade pip
-          pip install pandas matplotlib jupyter nbconvert
+          pip install pandas matplotlib jupyter nbconvert ipykernel
 
-      - name: Execute notebook (fail on error)
+      # sanity-check the file actually exists where we expect it
+      - name: List files
         run: |
-          jupyter nbconvert \
-            --to notebook \
-            --execute notebook/retail_analysis.ipynb \
-            --output executed.ipynb
+          ls -la
+          ls -la notebook || true
+
+      # run in one line to avoid YAML line-wrap issues
+      - name: Execute notebook (fail on error)
+        run: jupyter nbconvert --to notebook --execute notebook/retail_analysis.ipynb --output executed.ipynb --output-dir .
 
       - name: Export HTML preview
-        run: |
-          jupyter nbconvert --to html executed.ipynb --output executed.html
+        run: jupyter nbconvert --to html executed.ipynb --output executed.html --output-dir .
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
