@@ -1,8 +1,36 @@
-name: Hello
-on: [push]
+name: Notebook Checks
+on: [push, pull_request]
+
 jobs:
-  test:
+  test-notebook:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: echo "CI is working ✅"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas matplotlib jupyter nbconvert
+
+      - name: Execute notebook (fail on error)
+        run: |
+          jupyter nbconvert \
+            --to notebook \
+            --execute notebooks/retail_analysis.ipynb \
+            --output executed.ipynb
+
+      - name: Export HTML preview
+        run: |
+          jupyter nbconvert --to html executed.ipynb --output executed.html
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: notebook-previews
+          path: |
+            executed.ipynb
+            executed.html
