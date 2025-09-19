@@ -10,7 +10,7 @@ Built an end-to-end workflow with **Python (Pandas, Matplotlib)** for cleaning/E
 - **Average Order Value:** ~$456
 
 **Quick Links**
-- Notebook → [notebooks/retail_analysis.ipynb](notebooks/retail_analysis.ipynb)  
+- Notebook → [notebooks/retail_analysis.ipynb](notebook/retail_analysis.ipynb)  
 - Dashboard (PDF) → [visuals/retail_bi.pdf](visuals/retail_bi.pdf)
 
 > PBIX can be large; the PDF provides an instant preview.
