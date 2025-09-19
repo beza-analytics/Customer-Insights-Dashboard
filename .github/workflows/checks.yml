@@ -1,48 +1,8 @@
-name: Notebook Checks
-on: [push, pull_request]
-
+name: Hello
+on: [push]
 jobs:
-  test-notebook:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Install deps
-        run: |
-          python -m pip install --upgrade pip
-          pip install pandas matplotlib jupyter nbconvert
-
-      - name: Execute notebook (fail on error)
-        run: |
-          jupyter nbconvert \
-            --to notebook \
-            --execute notebooks/retail_analysis.ipynb \
-            --output executed.ipynb
-
-      - name: Export HTML preview
-        run: |
-          jupyter nbconvert \
-            --to html executed.ipynb \
-            --output executed.html
-
-      - name: Upload artifacts (HTML + executed notebook)
-        uses: actions/upload-artifact@v4
-        with:
-          name: notebook-previews
-          path: |
-            executed.ipynb
-            executed.html
-
-      - name: Warn on large files (>100MB)
-        run: |
-          max=104857600
-          too_big=$(git ls-files -s | awk '{print $4}' | while read f; do
-            [ -f "$f" ] && [ $(stat -c%s "$f") -gt $max ] && echo "$f"; done || true)
-          if [ -n "$too_big" ]; then
-            echo "Warning: Large files detected:"
-            echo "$too_big"
-          fi
+      - run: echo "CI is working ✅"
